@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
 
@@ -19,9 +18,9 @@
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -31,14 +30,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -47,9 +48,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -116,9 +117,6 @@ padding-right: 2em;
 font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 1.35;
-}
-#header {
-text-align: center;
 }
 #TOC {
 clear: both;
@@ -287,7 +285,8 @@ code > span.st { color: #d14; }
 code > span.co { color: #888888; font-style: italic; } 
 code > span.ot { color: #007020; } 
 code > span.al { color: #ff0000; font-weight: bold; } 
-code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
 
 
@@ -304,7 +303,72 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 
 
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(BARIS)</a></code></pre></div>
+<p>The French official open data portal offers a huge quantity of information. They also provide a well structured <a href="https://doc.data.gouv.fr/api/reference/">API</a>. The <a href="https://github.com/feddelegrand7/BARIS">BARIS</a> package allows you to exploit this API in order to get the required data from the portal.</p>
+<blockquote>
+<p>Within the portal there is the concept of a data set which contains one or several data frames or resources. So, if I use the resource term, you need to apprehend it as the data frame inside a data set.</p>
+</blockquote>
+<p>The package is available on CRAN, you can also install the development version from Github:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&quot;BARIS&quot;</span>)</span></code></pre></div>
+<p>Too much talking, let’s dive into a reproducible example.</p>
+<div id="baris_search" class="section level1">
+<h1>BARIS_search()</h1>
+<p>The <code>BARIS_search()</code> function allows you to search for a specified data set. <strong>A quick tip: within your query, use plain Nouns and avoid prepositions and determinants: le, la, de, des, en, à … and so on</strong> :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(BARIS)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">BARIS_search</span>(<span class="dt">query =</span> <span class="st">&quot;Monuments Historiques Marseille&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; # A tibble: 1 x 11</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;   id    title organization page  views frequency created_at last_modified</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;      &lt;chr&gt;        </span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 1 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2013-10-2~ 2019-05-09T0~</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; # ... with 3 more variables: last_update &lt;chr&gt;, archived &lt;chr&gt;, deleted &lt;chr&gt;</span></span></code></pre></div>
+<p>Cool we have our data set … but wait it would be better to get some explanation about it.</p>
+</div>
+<div id="baris_explain" class="section level1">
+<h1>BARIS_explain()</h1>
+<p>The <code>BARIS_explain()</code> function provides a description of a data set. The function takes one argument which is the ID of the data set:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">BARIS_explain</span>(<span class="dt">datasetId =</span> <span class="st">&quot;5cebfa8306e3e77ffdb31ef5&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; [1] &quot;Monuments historiques situés sur le territoire de Marseille, avec adresse, numéro de base Mérimée (base de données du Ministère de la Culture recensant les monuments historiques de toute la France) et points de géolocalisation&quot;</span></span></code></pre></div>
+<p>Don’t panic if you’re not a french speaker. You can always use the great <a href="https://CRAN.R-project.org/package=googleLanguageR">googleLanguageR</a>.</p>
+<p>Now, it’s time to list the resources contained within this data set !!!</p>
+</div>
+<div id="baris_resources" class="section level1">
+<h1>BARIS_resources()</h1>
+<p>The <code>BARIS_resources</code> function displays the available resources or data frames within a data set. The function takes as argument the ID of the data set:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">BARIS_resources</span>(<span class="dt">datasetId =</span> <span class="st">&quot;5cebfa8306e3e77ffdb31ef5&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; # A tibble: 2 x 6</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt;   id         title       format published   url             description         </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;   &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;           &lt;chr&gt;               </span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; 1 59ea7bba-~ MARSEILLE_~ csv    2019-05-27~ https://trouve~ Monuments historiqu~</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; 2 6328f8b3-~ Plan des M~ pdf    2019-05-27~ https://trouve~ Edition Janvier 2013</span></span></code></pre></div>
+<p>You can see from above that the data set has two resources, a <em>csv</em> and a <em>pdf</em>. Now, we’ve reached the interesting part: extracting the data frame that you’ll work on !</p>
+</div>
+<div id="baris_extract" class="section level1">
+<h1>BARIS_extract()</h1>
+<p>Using <code>BARIS_extract()</code> you can extract directly into your R session the needed data set. Currently, “only” theses formats are supported: json, csv, xls, xlsx, xml, geojson and shp, nevertheless you can always rely on the url of the resource to download it manually.</p>
+<p>In order to use the function you’ll have to specify two arguments: The ID of the resource and its format.</p>
+<blockquote>
+<p>You can visually catch the structure difference between the ID of a data set and the ID of a resource.</p>
+</blockquote>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2"></a>data &lt;-<span class="st"> </span><span class="kw">BARIS_extract</span>(<span class="dt">resourceId =</span> <span class="st">&quot;59ea7bba-f38a-4d75-b85f-2d1955050e53&quot;</span>, <span class="dt">format =</span> <span class="st">&quot;csv&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">head</span>(data)</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; # A tibble: 6 x 10</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt;   n_base_merimee date_de_protect~ denomination adresse code_postal</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;chr&gt;            &lt;chr&gt;        &lt;chr&gt;         &lt;int&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; 1 PA00081336     Classement : li~ Ancienne ég~ &quot;/&quot;           13002</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; 2 PA00081340     Classement: 13/~ Eglise Sain~ &quot;Espla~       13002</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; 3 PA00081331     Classement: 29/~ Chapelle et~ &quot;2, Ru~       13002</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; 4 PA00081344     Classement: 16/~ Fort Saint-~ &quot;&quot;            13002</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; 5 PA00081325     Inscription : 2~ Les deux bâ~ &quot;Quai ~       13002</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt; 6 PA00081334     Inscription : 0~ Clocher des~ &quot;Monté~       13002</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt; # ... with 5 more variables: proprietaire_du_monument &lt;chr&gt;,</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt; #   epoque_de_construction &lt;chr&gt;, date_de_construction &lt;chr&gt;, longitude &lt;dbl&gt;,</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; #   latitude &lt;dbl&gt;</span></span></code></pre></div>
+<p>End of the vignette.</p>
+</div>
 
 
 
