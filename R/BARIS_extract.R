@@ -1,12 +1,12 @@
 
-#' Reading A Dataframe From The French Portal data.gouv API
+#' Extracting A Data frame From The French Portal data.gouv API
 #'
-#' @description This function read directly into R a specific dataframe (resource) by the mean of its unique ID. Currently, BARIS_extract() can read directly the following types of file : json, csv, xls, xlsx, xml, geojson, and shp.
+#' @description This function read directly into R a specific data frame (resource) by the mean of its unique ID. Currently, BARIS_extract() can read directly the following types of file : json, csv, xls, xlsx, xml, geojson, and shp.
 #'
-#' @param resourceId the unique identifier of the individual dataframe (resource) to read into R. Not to confound with the global datasets ID that includes many dataframes
+#' @param resourceId the unique identifier of the individual data frame (resource) to read into R. Not to confound with the global data sets ID that includes many data frames
 #' @param format the format of the required file (json, csv, xls, xlsx, xml, geojson or shp)
 #'
-#' @return a dataframe
+#' @return a data frame
 #'
 #' @examples \donttest{
 #' BARIS_extract("59ea7bba-f38a-4d75-b85f-2d1955050e53", format = "csv")}
@@ -24,10 +24,15 @@
 #' @importFrom rio import
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils unzip
+#' @importFrom checkmate assert_character
 
 
 
 BARIS_extract <- function(resourceId, format) {
+
+  checkmate::assert_character(resourceId)
+
+  checkmate::assert_character(format)
 
 
   basic_url <- "https://www.data.gouv.fr/fr/datasets/r/"
@@ -67,7 +72,6 @@ BARIS_extract <- function(resourceId, format) {
 
     xmldf <- xmlToDataFrame(xml_info)
 
-    xmldf <- clean_names(xmldf)
 
     return(xmldf)
 
@@ -90,12 +94,6 @@ BARIS_extract <- function(resourceId, format) {
     unlink(c(temp, temp2))
 
 
-  #### Reading PDF files ############################################################
-
-
-  } else if (format == "pdf" || format == "document"){
-
-    BROWSE(final_url)
 
   #### Downloading ZIP file ############################################################
 
@@ -128,7 +126,6 @@ BARIS_extract <- function(resourceId, format) {
 
     df_json <- fromJSON(final_url)
 
-    df_json <- clean_names(df_json)
 
     return(df_json)
 
