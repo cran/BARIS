@@ -5,25 +5,32 @@
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/BARIS)](https://cran.r-project.org/package=BARIS)
-
+[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/BARIS)](https://cran.r-project.org/package=BARIS)
+[![CRAN\_time\_from\_release](https://www.r-pkg.org/badges/ago/BARIS)](https://cran.r-project.org/package=BARIS)
+[![CRAN\_latest\_release\_date](https://www.r-pkg.org/badges/last-release/BARIS)](https://cran.r-project.org/package=BARIS)
+[![metacran
+downloads](https://cranlogs.r-pkg.org/badges/BARIS)](https://cran.r-project.org/package=BARIS)
+[![metacran
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/BARIS)](https://cran.r-project.org/package=BARIS)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://choosealicense.com/licenses/mit/)
+[![R
+badge](https://img.shields.io/badge/Build%20with-♥%20and%20R-blue)](https://github.com/feddelegrand7/BARIS)
+[![R build
+status](https://github.com/feddelegrand7/BARIS/workflows/R-CMD-check/badge.svg)](https://github.com/feddelegrand7/BARIS/actions)
 <!-- badges: end -->
 
-[![](http://cranlogs.r-pkg.org/badges/grand-total/BARIS?color=blue)](https://cran.r-project.org/package=BARIS)
-
-With **BARIS** you can exploit the [French Official Open Data
+With **BARIS** you can interact with the [French Official Open Data
 Portal](https://www.data.gouv.fr/fr/) API directly from R. The package
 offers several capabilities, from listing the available data sets to
 extracting the needed resources. Nevertheless, there are many features
 offered by the API (e.g. uploading a data set, removing a resource …
 among others) that are not covered within the **BARIS** package which
-instead focus on the data analysis aspect of the API. The good news is
+instead focus on the data extraction aspect of the API. The good news is
 that the user doesn’t need an API key or any credential to run the
 available functions provided by **BARIS**. Finally, in order to fully
 apprehend the package, a distinction has to be made. The data.gouv API
-provides several **datasets which contain one or many data frames.** The
-unique identifier (ID) of a data set has this form :
+provides several **data sets which contain one or many data frames.**
+The unique identifier (ID) of a data set has this form :
 **53699934a3a729239d2051a1** while the ID of an individual data frame or
 resource has this form: **59ea7bba-f38a-4d75-b85f-2d1955050e53**.
 
@@ -33,7 +40,6 @@ You can install the BARIS package from
 [CRAN](https://cran.r-project.org/) with:
 
 ``` r
-
 install.packages("BARIS")
 ```
 
@@ -41,7 +47,6 @@ You can also install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-
 devtools::install_github("feddelegrand7/BARIS")
 ```
 
@@ -57,26 +62,23 @@ the data set.
 library(BARIS)
 
 BARIS_home()
-#> # A tibble: 12 x 13
-#>    id    title organization page  views frequency temporal_cov_st~
-#>    <chr> <chr> <chr>        <chr> <chr> <chr>     <chr>           
-#>  1 5eaa~ "Ind~ Ministère d~ http~ 15    unknown   <NA>            
-#>  2 5eb2~ "Sit~ Ministère d~ http~ 0     hourly    <NA>            
-#>  3 5e7d~ "Don~ Santé publi~ http~ 9     unknown   <NA>            
-#>  4 5e74~ "Don~ Santé publi~ http~ 43    unknown   <NA>            
-#>  5 5e7e~ "Don~ Santé publi~ http~ 108   daily     <NA>            
-#>  6 5ea7~ "Niv~ Santé publi~ http~ 3     daily     <NA>            
-#>  7 5ec3~ "Mes~ Unions de R~ http~ 0     unknown   <NA>            
-#>  8 5e9d~ "Don~ Etalab       http~ 1     daily     2020-12-31      
-#>  9 5ebc~ "Don~ Etalab       http~ 0     unknown   <NA>            
-#> 10 5ac4~ "Ann~ Caisse nati~ http~ 1     monthly   2019-05-01      
-#> 11 5ebc~ "Don~ Etalab       http~ 0     weekly    <NA>            
-#> 12 5e9d~ "SIN~ ADEME        http~ 0     unknown   <NA>            
+#> # A tibble: 9 x 13
+#>   id      title      organization     page      views frequency temporal_cov_st~
+#>   <chr>   <chr>      <chr>            <chr>     <chr> <chr>     <chr>           
+#> 1 6246ac~ Temps de ~ https://static.~ https://~ 47    irregular 2022-03-07      
+#> 2 623dd1~ Déclarati~ https://static.~ https://~ 30    unknown   <NA>            
+#> 3 541014~ Prix des ~ https://static.~ https://~ 16053 unknown   <NA>            
+#> 4 61f3ba~ Transitio~ https://static.~ https://~ 11    punctual  <NA>            
+#> 5 620bc1~ Liste des~ https://static.~ https://~ 1     punctual  2023-12-31      
+#> 6 6151bd~ Feuilles ~ https://static.~ https://~ 1481  annual    <NA>            
+#> 7 5ff5e6~ Baromètre~ https://static.~ https://~ 3445  punctual  <NA>            
+#> 8 60190d~ Synthèse ~ https://static.~ https://~ 42012 daily     <NA>            
+#> 9 61a73d~ Index Ega~ https://static.~ https://~ 132   daily     <NA>            
 #> # ... with 6 more variables: temporal_cov_end <chr>, created_at <chr>,
 #> #   last_modified <chr>, last_update <chr>, archived <chr>, deleted <chr>
 ```
 
-The data is quite condensated so you should use the `View()` or
+The data is quite condensed so you should use the `View()` or
 `DT::datatable()` functions.
 
 ## BARIS\_search()
@@ -85,67 +87,32 @@ The `BARIS_search()` function allows you to search for a specific data
 set. Suppose we’re curious about the city of Marseille.
 
 ``` r
-
-BARIS_search(query = "Marseille", n_pages = 20)
-#> # A tibble: 20 x 11
-#>    id    title organization page  views frequency created_at last_modified
-#>    <chr> <chr> <chr>        <chr> <chr> <chr>     <chr>      <chr>        
-#>  1 5369~ Traf~ Ministère d~ http~ 0     annual    2013-07-0~ 2016-03-04T0~
-#>  2 5369~ Déco~ OpenStreetM~ http~ 28    annual    2013-11-1~ 2020-01-02T1~
-#>  3 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2012-12-0~ 2019-05-09T0~
-#>  4 5e5a~ Cave~ <NA>         http~ 0     irregular 2020-02-2~ 2020-03-01T1~
-#>  5 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2012-12-2~ 2019-11-15T0~
-#>  6 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2015-07-1~ 2019-05-09T0~
-#>  7 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2012-12-0~ 2019-05-09T0~
-#>  8 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2017-07-2~ 2019-05-09T0~
-#>  9 5dd7~ Quar~ Datactivist  http~ 0     unknown   2019-11-2~ 2019-11-22T1~
-#> 10 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2013-10-2~ 2019-05-09T0~
-#> 11 5e87~ Mars~ Ville de Ma~ http~ 0     unknown   2020-04-0~ 2020-04-03T0~
-#> 12 5878~ Quar~ NosDonnées.~ http~ 0     unknown   2016-03-3~ 2017-07-10T0~
-#> 13 5878~ Arro~ NosDonnées.~ http~ 0     unknown   2014-03-0~ 2017-07-10T0~
-#> 14 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2018-02-0~ 2019-05-09T0~
-#> 15 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2009-06-0~ 2019-05-27T0~
-#> 16 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2012-12-0~ 2019-05-09T0~
-#> 17 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2012-12-0~ 2019-12-30T0~
-#> 18 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2012-12-0~ 2019-05-09T0~
-#> 19 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2014-05-0~ 2019-05-09T0~
-#> 20 5ceb~ Mars~ Ville de Ma~ http~ 0     unknown   2012-11-2~ 2019-05-09T0~
-#> # ... with 3 more variables: last_update <chr>, archived <chr>, deleted <chr>
-```
-
-The **n\_page** argument is used to specify the number of pages to
-search for according to the pagination system of the API, by default its
-value is equal to 20. Now, in order to choose a dataset, let’s have a
-look at two columns, the ID and the title of each dataset.
-
-``` r
-
-Marseille_data <- BARIS_search(query = "Marseille", n_pages = 20)
+Marseille_data <- BARIS_search(query = "Marseille", page_number = 1, page_size = 20)
 
 Marseille_data[, c("id", "title")]
 #> # A tibble: 20 x 2
-#>    id                     title                                                 
-#>    <chr>                  <chr>                                                 
-#>  1 5369a248a3a729239d206~ Trafic aéroport Marseille-Provence : passagers et mou~
-#>  2 53699233a3a729239d203~ Découpage administratif communal français issu d'Open~
-#>  3 5cebfa8506e3e77ffdb31~ Marseille - Cimetières                                
-#>  4 5e5a7bc2634f413b2369e~ Caves à bière                                         
-#>  5 5cebfa869ce2e76116c3a~ Marseille - Délibérations                             
-#>  6 5cebfa8706e3e77c78b31~ Marseille - Crèches                                   
-#>  7 5cebfa839ce2e76116c3a~ Marseille - Élus                                      
-#>  8 5cebfa869ce2e764aac3a~ Marseille - Subventions                               
-#>  9 5dd7a9a78b4c41277a7fb~ Quartiers de Marseille                                
-#> 10 5cebfa8306e3e77ffdb31~ Marseille - Monuments historiques                     
-#> 11 5e87cef997cf8d9b8cd10~ Marseille - COVID19 - crèches ouvertes                
-#> 12 5878ee75a3a7291484cac~ Quartiers de Marseille                                
-#> 13 5878ee29a3a7291485cac~ Arrondissements de Marseille                          
-#> 14 5cebfa889ce2e76116c3a~ Marseille - Tournages de films et séries              
-#> 15 5cebfa829ce2e76116c3a~ Marseille - Élections européennes                     
-#> 16 5cebfa839ce2e764aac3a~ Marseille - Marchés forains                           
-#> 17 5cebfa859ce2e76116c3a~ Marseille - Budget primitif                           
-#> 18 5cebfa8306e3e77c78b31~ Marseille - Bases nautiques et plages                 
-#> 19 5cebfa8706e3e77ffdb31~ Marseille - Élections législatives                    
-#> 20 5cebfa879ce2e76116c3a~ Marseille - Localisation des stations de taxis
+#>    id                       title                            
+#>    <chr>                    <chr>                            
+#>  1 5cebfa839ce2e76116c3af0d Marseille - Élus                 
+#>  2 5cebfa8506e3e77ffdb31ef8 Marseille - Cimetières           
+#>  3 5cebfa869ce2e76116c3af11 Marseille - Délibérations        
+#>  4 5cebfa869ce2e764aac3af2b Marseille - Subventions          
+#>  5 5cebfa8706e3e77c78b31f0a Marseille - Crèches              
+#>  6 5f654cd6e39b90e17b8021e3 Marseille - Photographies        
+#>  7 604ff6a2b0a782adba71fa22 Marseille - Biodiversité         
+#>  8 604ff6ddbc5a324a0c7ce5a7 Marseille - Eclairage            
+#>  9 53698f14a3a729239d203643 Arrondissements de Marseille     
+#> 10 5878ee29a3a7291485cac7b2 Arrondissements de Marseille     
+#> 11 5878ee75a3a7291484cac81f Quartiers de Marseille           
+#> 12 5cebfa8206e3e77ffdb31ef4 Marseille - Élections municipales
+#> 13 5cebfa829ce2e76116c3af0c Marseille - Élections européennes
+#> 14 5cebfa8306e3e77c78b31f05 Marseille - Écoles élémentaires  
+#> 15 5cebfa8306e3e77ffdb31ef5 Marseille - Monuments historiques
+#> 16 5cebfa8306e3e77ffdb31ef6 Marseille - Compte administratif 
+#> 17 5cebfa839ce2e76116c3af0e Marseille - Wifi public          
+#> 18 5cebfa839ce2e764aac3af27 Marseille - Marchés forains      
+#> 19 5cebfa8406e3e77ffdb31ef7 Marseille - Équipements sportifs 
+#> 20 5cebfa849ce2e764aac3af28 Marseille - Écoles maternelles
 ```
 
 Suppose we’re interested in the dataset entitled **Marseille - Monuments
@@ -159,7 +126,6 @@ and we want to know more about this data. In this case, the
 argument which is the ID of the dataset of interest.
 
 ``` r
-
 BARIS_explain("5cebfa8306e3e77ffdb31ef5")
 #> [1] "Monuments historiques situés sur le territoire de Marseille, avec adresse, numéro de base Mérimée (base de données du Ministère de la Culture recensant les monuments historiques de toute la France) et points de géolocalisation"
 ```
@@ -177,7 +143,6 @@ function allows you to list all the available resources within a
 determined data set.
 
 ``` r
-
 BARIS_resources("5cebfa8306e3e77ffdb31ef5") # The "Marseille - Monuments historiques" ID
 #> # A tibble: 2 x 6
 #>   id         title       format published   url             description         
@@ -202,21 +167,20 @@ As an example, let us extract the above listed csv file:
 *MARSEILLE\_MONUMENTS\_HISTORIQUES\_2018.csv*:
 
 ``` r
-
 BARIS_extract(resourceId = "59ea7bba-f38a-4d75-b85f-2d1955050e53", format = "csv")
 #> # A tibble: 80 x 10
-#>    n_base_merimee date_de_protect~ denomination adresse code_postal
-#>    <chr>          <chr>            <chr>        <chr>         <int>
-#>  1 PA00081336     Classement : li~ Ancienne ég~ "/"           13002
-#>  2 PA00081340     Classement: 13/~ Eglise Sain~ "Espla~       13002
-#>  3 PA00081331     Classement: 29/~ Chapelle et~ "2, Ru~       13002
-#>  4 PA00081344     Classement: 16/~ Fort Saint-~ ""            13002
-#>  5 PA00081325     Inscription : 2~ Les deux bâ~ "Quai ~       13002
-#>  6 PA00081334     Inscription : 0~ Clocher des~ "Monté~       13002
-#>  7 PA00081348     Classement: 12/~ Hôtel Davie~ "Place~       13002
-#>  8 PA00081363     Classement: 02/~ Maison dite~ "27, G~       13002
-#>  9 PA00081349     Inscription : 1~ Hôtel-Dieu-~ "6, Pl~       13002
-#> 10 PA00081354     Classement: 30/~ Hôtel de Vi~ "Quai ~       13002
+#>    n_base_merimee date_de_protection_~ denomination        adresse   code_postal
+#>    <chr>          <chr>                <chr>               <chr>           <int>
+#>  1 PA00081336     Classement : liste ~ Ancienne église de~ "/"             13002
+#>  2 PA00081340     Classement: 13/09/1~ Eglise Saint-Laure~ "Esplana~       13002
+#>  3 PA00081331     Classement: 29/01/1~ Chapelle et Hospic~ "2, Rue ~       13002
+#>  4 PA00081344     Classement: 16/06/1~ Fort Saint-Jean     ""              13002
+#>  5 PA00081325     Inscription : 23/11~ Les deux bâtiments~ "Quai du~       13002
+#>  6 PA00081334     Inscription : 07/07~ Clocher des Accoul~ "Montée ~       13002
+#>  7 PA00081348     Classement: 12/01/1~ Hôtel Daviel (anci~ "Place D~       13002
+#>  8 PA00081363     Classement: 02/05/1~ Maison dite de l’É~ "27, Gra~       13002
+#>  9 PA00081349     Inscription : 14/10~ Hôtel-Dieu- Façade~ "6, Plac~       13002
+#> 10 PA00081354     Classement: 30/04/1~ Hôtel de Ville      "Quai du~       13002
 #> # ... with 70 more rows, and 5 more variables: proprietaire_du_monument <chr>,
 #> #   epoque_de_construction <chr>, date_de_construction <chr>, longitude <dbl>,
 #> #   latitude <dbl>
@@ -226,35 +190,37 @@ BARIS_extract(resourceId = "59ea7bba-f38a-4d75-b85f-2d1955050e53", format = "csv
 
 BARIS comes with an integrated Addin that generates a Shiny widget
 allowing the user to interact with the package in an interactive manner.
+You can trigger the addin from the `Addins` menu in `RStudio` or you can
+run:
+
+``` r
+BARIS:::BARIS_ui()
+```
+
+![](man/figures/gif_baris.gif)
 
 # Citation
 
 If you use the BARIS package for your work, research or teaching, I’d
 appreciate if you could cite it as follows:
 
-``` r
-citation("BARIS")
-#> 
-#> To cite package 'BARIS' in publications use:
-#> 
-#>   Mohamed El Fodil Ihaddaden (NA). BARIS: Access and Import Data from
-#>   the French Open Data Portal. R package version 1.1.0.
-#>   https://github.com/feddelegrand7/BARIS
-#> 
-#> A BibTeX entry for LaTeX users is
-#> 
-#>   @Manual{,
-#>     title = {BARIS: Access and Import Data from the French Open Data Portal},
-#>     author = {Mohamed El Fodil Ihaddaden},
-#>     note = {R package version 1.1.0},
-#>     url = {https://github.com/feddelegrand7/BARIS},
-#>   }
-#> 
-#> ATTENTION: This citation information has been auto-generated from the
-#> package DESCRIPTION file and may need manual editing, see
-#> 'help("citation")'.
-```
+Mohamed El Fodil Ihaddaden (2020). BARIS: Access and Import Data from
+the French Open Data Portal. R package version 1.1.1.
+<https://CRAN.R-project.org/package=BARIS>
 
+A BibTeX entry for LaTeX users is
+
+@Manual{, title = {BARIS: Access and Import Data from the French Open
+Data Portal}, author = {Mohamed El Fodil Ihaddaden}, year = {2020}, note
+= {R package version 1.1.1}, url =
+{<https://CRAN.R-project.org/package=BARIS>}, }
+
+## Code of Conduct
+
+Please note that the BARIS project is released with a [Contributor Code
+of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
 Finally, I appreciate any feedback, feel free to reach out at
 [moh\_fodil](https://twitter.com/moh_fodil) or open an issue on
 [Github](https://github.com/feddelegrand7/BARIS/issues).
