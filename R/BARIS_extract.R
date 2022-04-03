@@ -34,7 +34,6 @@ BARIS_extract <- function(resourceId, format) {
 
   checkmate::assert_character(format)
 
-
   basic_url <- "https://www.data.gouv.fr/fr/datasets/r/"
 
   final_url <- paste(basic_url, resourceId, sep = "")
